@@ -74,3 +74,45 @@ python ml_model/train.py
 ## Response Time Model
 
 Each server's simulated response time is computed as:
+response_time = Uniform(0.1, 0.5) + current_load * 0.05
+
+where `current_load` is the number of active connections on the server at the time 
+the request begins processing.
+
+---
+
+## Output
+
+After running `main.py`, you'll get:
+- `visualization/avg_response_time.png` — average response time per algorithm
+- `visualization/server_utilzation.png` — requests handled per server per algorithm
+- `visualization/response_over_time.png` — per-request response time across the full run
+
+---
+
+## Project Structure
+SE Project/
+├── main.py
+├── algorithms/
+│   ├── round_robin.py
+│   └── least_connection.py
+├── ml_model/
+│   ├── train.py
+│   ├── predictor.py
+│   └── model.pkl
+├── servers/
+│   └── server.py
+├── traffic/
+│   └── generator.py
+├── metrics/
+│   └── tracker.py
+└── visualization/
+└── charts.py
+
+---
+
+## Notes
+
+- This is a course project (Software Engineering) built as a simulation prototype — 
+  it does not implement real network communication.
+- Full SRS (IEEE Std 830-1998 compliant) available in `/docs` for implementation details.
