@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Smart Load Balancer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+        :root {
+            --bg: #050a0f;
+            --surface: #0b1520;
+            --surface2: #0f1e2e;
+            --border: #1a3a5c;
+            --accent: #00d4ff;
+            --accent2: #00ff9f;
+            --accent3: #ff6b35;
+            --ai: #c084fc;
+            --rr: #00ff9f;
+            --lc: #00d4ff;
+            --text: #c8dde8;
+            --muted: #4a6b82;
+        }
+        
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background: var(--bg);
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--text);
+            min-height: 100vh;
+            padding: 28px 18px;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.1rem, 4vw, 1.9rem);
+            font-weight: 900;
+            color: var(--accent);
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+            letter-spacing: 0.1em;
+        }
+        
+        header p {
+            font-size: 0.65rem;
+            color: var(--muted);
+            margin-top: 5px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 4px;
+        }
+        
+        .control-group label {
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+        }
+        
+        .control-group input[type=range] {
+            width: 100px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+        
+        .val-display {
+            font-size: 0.75rem;
+            color: var(--accent);
+            min-width: 28px;
+        }
+        
+        .btn {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-reset {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-reset:hover {
+            border-color: var(--muted);
+            color: var(--text);
+        }
+        
+        .progress-bar {
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .progress-bar.visible {
+            display: block;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent2), var(--accent), var(--ai));
+            border-radius: 2px;
+            transition: width 0.3s linear;
+        }
+        
+        .algo-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.72rem;
+        }
+        
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .stat-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.62rem;
+            color: var(--muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .stat-value.green {
+            color: var(--rr);
+        }
+        
+        .stat-value.purple {
+            color: var(--ai);
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+        
+        .card.rr::before {
+            background: var(--rr);
+        }
+        
+        .card.lc::before {
+            background: var(--lc);
+        }
+        
+        .card.ai::before {
+            background: var(--ai);
+        }
+        
+        .card.neutral::before {
+            background: var(--border);
+        }
+        
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+        }
+        
+        .card.rr .card-title {
+            color: var(--rr);
+        }
+        
+        .card.lc .card-title {
+            color: var(--lc);
+        }
+        
+        .card.ai .card-title {
+            color: var(--ai);
+        }
+        
+        .server-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 8px;
+            transition: border-color 0.3s;
+        }
+        
+        .server-card.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+        }
+        
+        .server-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.65rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .server-stat {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        
+        .server-stat span:last-child {
+            color: var(--text);
+        }
+        
+        .load-bar-wrap {
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            margin: 8px 0 4px;
+            overflow: hidden;
+        }
+        
+        .load-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+        }
+        
+        .load-bar.high {
+            background: linear-gradient(90deg, var(--accent3), #ff3366);
+        }
+        
+        .load-bar.med {
+            background: linear-gradient(90deg, #f59e0b, var(--accent3));
+        }
+        
+        .log-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            height: 180px;
+            overflow-y: auto;
+            padding: 10px 12px;
+            font-size: 0.68rem;
+            line-height: 1.8;
+        }
+        
+        .log-box::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .log-box::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+        
+        .log-entry .ts {
+            color: var(--border);
+        }
+        
+        .log-entry .srv {
+            font-weight: bold;
+        }
+        
+        .log-entry.rr .srv {
+            color: var(--rr);
+        }
+        
+        .log-entry.lc .srv {
+            color: var(--lc);
+        }
+        
+        .log-entry.ai .srv {
+            color: var(--ai);
+        }
+        
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .chart-wrap {
+            position: relative;
+            height: 170px;
+        }
+        
+        .comparison {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .comparison table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.72rem;
+        }
+        
+        .comparison th {
+            background: var(--surface2);
+            padding: 10px 14px;
+            text-align: left;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .comparison td {
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(26, 58, 92, 0.5);
+        }
+        
+        .comparison tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 2px;
+            font-size: 0.65rem;
+        }
+        
+        .badge.best {
+            background: rgba(0, 255, 159, 0.15);
+            color: var(--rr);
+            border: 1px solid rgba(0, 255, 159, 0.3);
+        }
+        
+        .badge.good {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--lc);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .badge.ok {
+            background: rgba(192, 132, 252, 0.15);
+            color: var(--ai);
+            border: 1px solid rgba(192, 132, 252, 0.3);
+        }
+        
+        .error-msg {
+            color: var(--accent3);
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 12px;
+            display: none;
+        }
+        
+        @media (max-width: 640px) {
+            .main-grid,
+            .charts-section,
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <h1>AI SMART LOAD BALANCER</h1>
+            <p>Software Engineering · FAST-NUCES Karachi · Real Python Simulation</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>REQUESTS</label>
+                <input type="range" id="reqCount" min="30" max="300" value="100" step="10">
+                <span class="val-display" id="reqVal">100</span>
+            </div>
+            <button class="btn btn-primary" id="runBtn" onclick="runSim()">▶ RUN SIM</button>
+            <button class="btn btn-reset" onclick="resetAll()">↺ RESET</button>
+        </div>
+
+        <div class="algo-legend">
+            <div class="legend-item">
+                <div class="legend-dot" style="background:var(--rr)"></div> Round Robin</div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background:var(--lc)"></div> Least Connections</div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background:var(--ai)"></div> AI Balancer</div>
+        </div>
+
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="error-msg" id="errorMsg">⚠ Could not connect to Flask server. Make sure app.py is running.</div>
+
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-label">Total Requests</div>
+                <div class="stat-value" id="statTotal">—</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Avg Response (RR)</div>
+                <div class="stat-value green" id="statRR">—</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Avg Response (AI)</div>
+                <div class="stat-value purple" id="statAI">—</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card rr">
+                <div class="card-title">Round Robin</div>
+                <div id="rr-servers">
+                    <div style="color:var(--muted);font-size:0.7rem">Waiting...</div>
+                </div>
+            </div>
+            <div class="card lc">
+                <div class="card-title">Least Connections</div>
+                <div id="lc-servers">
+                    <div style="color:var(--muted);font-size:0.7rem">Waiting...</div>
+                </div>
+            </div>
+            <div class="card ai">
+                <div class="card-title">AI Balancer</div>
+                <div id="ai-servers">
+                    <div style="color:var(--muted);font-size:0.7rem">Waiting...</div>
+                </div>
+            </div>
+            <div class="card neutral">
+                <div class="card-title" style="color:var(--accent)">Request Log</div>
+                <div class="log-box" id="logBox">
+                    <div style="color:var(--muted)">// Waiting for simulation...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-section">
+            <div class="card neutral">
+                <div class="card-title" style="color:var(--accent)">Avg Response Time (s)</div>
+                <div class="chart-wrap"><canvas id="barChart"></canvas></div>
+            </div>
+            <div class="card neutral">
+                <div class="card-title" style="color:var(--accent)">Response Time Per Request</div>
+                <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="comparison">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ALGORITHM</th>
+                        <th>AVG RESPONSE</th>
+                        <th>SRV-1 REQS</th>
+                        <th>SRV-2 REQS</th>
+                        <th>SRV-3 REQS</th>
+                        <th>RATING</th>
+                    </tr>
+                </thead>
+                <tbody id="compTable">
+                    <tr>
+                        <td colspan="6" style="color:var(--muted);text-align:center;padding:20px">Run simulation to see results</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script>
+        let barChart, lineChart;
+
+        function initCharts() {
+            const base = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                animation: {
+                    duration: 500
+                },
+            };
+
+            barChart = new Chart(document.getElementById('barChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Round Robin', 'Least Conn', 'AI Balancer'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: ['rgba(0,255,159,0.2)', 'rgba(0,212,255,0.2)', 'rgba(192,132,252,0.2)'],
+                        borderColor: ['#00ff9f', '#00d4ff', '#c084fc'],
+                        borderWidth: 2,
+                        borderRadius: 3,
+                    }]
+                },
+                options: {
+                    ...base,
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#4a6b82',
+                                font: {
+                                    family: 'Share Tech Mono',
+                                    size: 10
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(26,58,92,0.5)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#4a6b82',
+                                font: {
+                                    family: 'Share Tech Mono',
+                                    size: 10
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(26,58,92,0.5)'
+                            },
+                            beginAtZero: true
+                        },
+                    }
+                }
+            });
+
+            lineChart = new Chart(document.getElementById('lineChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'RR',
+                        data: [],
+                        borderColor: '#00ff9f',
+                        backgroundColor: 'transparent',
+                        borderWidth: 1.5,
+                        pointRadius: 0,
+                        tension: 0.3
+                    }, {
+                        label: 'LC',
+                        data: [],
+                        borderColor: '#00d4ff',
+                        backgroundColor: 'transparent',
+                        borderWidth: 1.5,
+                        pointRadius: 0,
+                        tension: 0.3
+                    }, {
+                        label: 'AI',
+                        data: [],
+                        borderColor: '#c084fc',
+                        backgroundColor: 'transparent',
+                        borderWidth: 1.5,
+                        pointRadius: 0,
+                        tension: 0.3
+                    }, ]
+                },
+                options: {
+                    ...base,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: '#4a6b82',
+                                font: {
+                                    family: 'Share Tech Mono',
+                                    size: 9
+                                },
+                                boxWidth: 12
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                display: false
+                            },
+                            grid: {
+                                color: 'rgba(26,58,92,0.3)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#4a6b82',
+                                font: {
+                                    family: 'Share Tech Mono',
+                                    size: 9
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(26,58,92,0.3)'
+                            },
+                            beginAtZero: true
+                        },
+                    }
+                }
+            });
+        }
+
+        function renderServers(containerId, utilization) {
+            const maxLoad = Math.max(...utilization.map(s => s.total), 1);
+            const html = utilization.map(s => {
+                const pct = Math.round((s.total / maxLoad) * 100);
+                const barClass = pct > 70 ? 'high' : pct > 40 ? 'med' : '';
+                return `
+      <div class="server-card">
+        <div class="server-name">${s.name}</div>
+        <div class="server-stat"><span>REQUESTS</span><span>${s.total}</span></div>
+        <div class="server-stat"><span>AVG RT</span><span>${s.avg_rt}s</span></div>
+        <div class="load-bar-wrap"><div class="load-bar ${barClass}" style="width:${pct}%"></div></div>
+        <div class="server-stat" style="font-size:0.6rem"><span>UTILIZATION</span><span>${pct}%</span></div>
+      </div>`;
+            }).join('');
+            document.getElementById(containerId).innerHTML = html;
+        }
+
+        function renderLog(rrLog, lcLog, aiLog) {
+            const box = document.getElementById('logBox');
+            box.innerHTML = '';
+            const combined = [];
+            rrLog.forEach(e => combined.push({...e,
+                algo: 'rr'
+            }));
+            lcLog.forEach(e => combined.push({...e,
+                algo: 'lc'
+            }));
+            aiLog.forEach(e => combined.push({...e,
+                algo: 'ai'
+            }));
+            combined.sort((a, b) => a.req - b.req);
+
+            // Show last 60 entries
+            combined.slice(-60).forEach(e => {
+                const div = document.createElement('div');
+                div.className = `log-entry ${e.algo}`;
+                div.innerHTML = `<span class="ts">[${String(e.req).padStart(3,'0')}]</span> <span style="color:var(--muted)">${e.algo.toUpperCase()}</span> → <span class="srv">${e.server}</span> <span style="color:var(--muted)">(${e.rt}s)</span>`;
+                box.appendChild(div);
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function renderComparison(data) {
+            const badges = {
+                round_robin: 'best',
+                least_connections: 'good',
+                ai_balancer: 'ok'
+            };
+            const labels = {
+                round_robin: 'BALANCED',
+                least_connections: 'SMART',
+                ai_balancer: 'ADAPTIVE'
+            };
+            const names = {
+                round_robin: 'Round Robin',
+                least_connections: 'Least Connections',
+                ai_balancer: 'AI Balancer'
+            };
+
+            const rows = ['round_robin', 'least_connections', 'ai_balancer'].map(key => {
+                const d = data[key];
+                const u = d.utilization;
+                return `<tr>
+      <td style="color:var(--text)">${names[key]}</td>
+      <td style="color:var(--accent)">${d.avg_response_time}s</td>
+      <td>${u[0].total}</td>
+      <td>${u[1].total}</td>
+      <td>${u[2].total}</td>
+      <td><span class="badge ${badges[key]}">${labels[key]}</span></td>
+    </tr>`;
+            }).join('');
+
+            document.getElementById('compTable').innerHTML = rows;
+        }
+
+        async function runSim() {
+            const n = document.getElementById('reqCount').value;
+            const btn = document.getElementById('runBtn');
+            const errMsg = document.getElementById('errorMsg');
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+
+            btn.disabled = true;
+            btn.textContent = '⏳ RUNNING...';
+            errMsg.style.display = 'none';
+            progressBar.classList.add('visible');
+
+            // Animate progress while waiting
+            let prog = 0;
+            const progInterval = setInterval(() => {
+                prog = Math.min(prog + 2, 90);
+                progressFill.style.width = prog + '%';
+            }, 100);
+
+            try {
+                const res = await fetch(`/simulate/${n}`);
+                if (!res.ok) throw new Error('Server error');
+                const data = await res.json();
+
+                clearInterval(progInterval);
+                progressFill.style.width = '100%';
+
+                // Stats
+                document.getElementById('statTotal').textContent = data.round_robin.total_requests;
+                document.getElementById('statRR').textContent = data.round_robin.avg_response_time + 's';
+                document.getElementById('statAI').textContent = data.ai_balancer.avg_response_time + 's';
+
+                // Servers
+                renderServers('rr-servers', data.round_robin.utilization);
+                renderServers('lc-servers', data.least_connections.utilization);
+                renderServers('ai-servers', data.ai_balancer.utilization);
+
+                // Log
+                renderLog(data.round_robin.log, data.least_connections.log, data.ai_balancer.log);
+
+                // Charts
+                barChart.data.datasets[0].data = [
+                    data.round_robin.avg_response_time,
+                    data.least_connections.avg_response_time,
+                    data.ai_balancer.avg_response_time
+                ];
+                barChart.update();
+
+                const n_pts = data.round_robin.times.length;
+                lineChart.data.labels = Array.from({
+                    length: n_pts
+                }, (_, i) => i + 1);
+                lineChart.data.datasets[0].data = data.round_robin.times;
+                lineChart.data.datasets[1].data = data.least_connections.times;
+                lineChart.data.datasets[2].data = data.ai_balancer.times;
+                lineChart.update();
+
+                // Table
+                renderComparison(data);
+
+                setTimeout(() => {
+                    progressBar.classList.remove('visible');
+                    progressFill.style.width = '0%';
+                }, 800);
+
+            } catch (err) {
+                clearInterval(progInterval);
+                progressBar.classList.remove('visible');
+                progressFill.style.width = '0%';
+                errMsg.style.display = 'block';
+            }
+
+            btn.disabled = false;
+            btn.textContent = '▶ RUN SIM';
+        }
+
+        function resetAll() {
+            document.getElementById('statTotal').textContent = '—';
+            document.getElementById('statRR').textContent = '—';
+            document.getElementById('statAI').textContent = '—';
+            document.getElementById('rr-servers').innerHTML = '<div style="color:var(--muted);font-size:0.7rem">Waiting...</div>';
+            document.getElementById('lc-servers').innerHTML = '<div style="color:var(--muted);font-size:0.7rem">Waiting...</div>';
+            document.getElementById('ai-servers').innerHTML = '<div style="color:var(--muted);font-size:0.7rem">Waiting...</div>';
+            document.getElementById('logBox').innerHTML = '<div style="color:var(--muted)">// Waiting for simulation...</div>';
+            document.getElementById('compTable').innerHTML = '<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:20px">Run simulation to see results</td></tr>';
+            document.getElementById('errorMsg').style.display = 'none';
+            barChart.data.datasets[0].data = [0, 0, 0];
+            barChart.update();
+            lineChart.data.labels = [];
+            lineChart.data.datasets.forEach(d => d.data = []);
+            lineChart.update();
+        }
+
+        window.addEventListener('DOMContentLoaded', initCharts);
+        document.getElementById('reqCount').addEventListener('input', function() {
+            document.getElementById('reqVal').textContent = this.value;
+        });
+    </script>
+</body>
+
+</html>

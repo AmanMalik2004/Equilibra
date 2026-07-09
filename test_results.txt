@@ -1,0 +1,242 @@
+======================================================================
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+  TEST RUN  —  2026-05-07  13:17:29
+=
+
+test_avoids_overloaded_server (__main__.TestAILoadBalancer.test_avoids_overloaded_server)
+AI should generally avoid heavily loaded servers ... ok
+test_consistent_output_type (__main__.TestAILoadBalancer.test_consistent_output_type)
+Multiple calls should always return a Server ... ok
+test_model_file_exists (__main__.TestAILoadBalancer.test_model_file_exists)
+Model pickle file should exist after training ... ok
+test_returns_server_object (__main__.TestAILoadBalancer.test_returns_server_object)
+get_server should return a Server instance ... ok
+test_returns_valid_server (__main__.TestAILoadBalancer.test_returns_valid_server)
+Should return one of the 3 known servers ... ok
+test_ai_full_pipeline (__main__.TestIntegration.test_ai_full_pipeline)
+Integration: AI Balancer handles all requests ... ok
+test_all_algos_produce_positive_avg (__main__.TestIntegration.test_all_algos_produce_positive_avg)
+Integration: all algorithms should produce positive avg response time ... ok
+test_lc_full_pipeline (__main__.TestIntegration.test_lc_full_pipeline)
+Integration: Least Connections handles all requests ... ok
+test_rr_full_pipeline (__main__.TestIntegration.test_rr_full_pipeline)
+Integration: Round Robin handles all requests ... ok
+test_total_requests_distributed_across_servers (__main__.TestIntegration.test_total_requests_distributed_across_servers)
+Integration: total requests across servers should equal n ... ok
+test_adapts_to_changing_loads (__main__.TestLeastConnections.test_adapts_to_changing_loads) ... ok
+test_avoids_overloaded_server (__main__.TestLeastConnections.test_avoids_overloaded_server)
+Should never pick the server with highest load ... ok
+test_picks_first_when_all_equal (__main__.TestLeastConnections.test_picks_first_when_all_equal)
+When all loads equal, should pick first server ... ok
+test_picks_server_with_least_load (__main__.TestLeastConnections.test_picks_server_with_least_load)
+Should pick the server with lowest current_load ... ok
+test_returns_server_object (__main__.TestLeastConnections.test_returns_server_object)
+get_server should return a Server instance ... ok
+test_average_correct (__main__.TestMetricsTracker.test_average_correct)
+Average should be mathematically correct ... ok
+test_initial_avg_is_zero (__main__.TestMetricsTracker.test_initial_avg_is_zero)
+Average should be 0 with no records ... ok
+test_record_increments_count (__main__.TestMetricsTracker.test_record_increments_count)
+Recording a time should increment total_requests ... ok
+test_record_multiple (__main__.TestMetricsTracker.test_record_multiple)
+Should correctly count multiple records ... ok
+test_single_record_avg_equals_value (__main__.TestMetricsTracker.test_single_record_avg_equals_value)
+Average of one record should equal that record ... ok
+test_total_requests_starts_zero (__main__.TestMetricsTracker.test_total_requests_starts_zero)
+Total requests should start at 0 ... ok
+test_even_distribution_over_300_requests (__main__.TestRoundRobin.test_even_distribution_over_300_requests)
+Over 300 requests each server should get exactly 100 ... ok
+test_first_pick_is_server_0 (__main__.TestRoundRobin.test_first_pick_is_server_0)
+First request should go to Server 0 ... ok
+test_returns_server_object (__main__.TestRoundRobin.test_returns_server_object)
+get_server should return a Server instance ... ok
+test_second_pick_is_server_1 (__main__.TestRoundRobin.test_second_pick_is_server_1)
+Second request should go to Server 1 ... ok
+test_third_pick_is_server_2 (__main__.TestRoundRobin.test_third_pick_is_server_2)
+Third request should go to Server 2 ... ok
+test_wraps_around_to_server_0 (__main__.TestRoundRobin.test_wraps_around_to_server_0)
+After 3 picks it should wrap back to Server 0 ... ok
+test_avg_response_time_no_requests (__main__.TestServer.test_avg_response_time_no_requests)
+Avg response time should be 0 if no requests handled ... ok
+test_avg_response_time_positive_after_requests (__main__.TestServer.test_avg_response_time_positive_after_requests)
+Avg response time should be positive after handling requests ... ok
+test_busier_server_slower (__main__.TestServer.test_busier_server_slower)
+Higher load should generally produce higher response time ... ok
+test_handle_request_increments_total (__main__.TestServer.test_handle_request_increments_total)
+Each request should increment total_requests ... ok
+test_handle_request_returns_positive_time (__main__.TestServer.test_handle_request_returns_positive_time)
+Response time must always be positive ... ok
+test_initial_load_is_zero (__main__.TestServer.test_initial_load_is_zero)
+Server should start with zero load ... ok
+test_initial_requests_zero (__main__.TestServer.test_initial_requests_zero)
+Server should start with zero total requests ... ok
+test_reset_clears_all (__main__.TestServer.test_reset_clears_all)
+Reset should zero out all stats ... ok
+test_utilization_equals_total_requests (__main__.TestServer.test_utilization_equals_total_requests)
+Utilization should match total requests handled ... ok
+test_bva_just_above_minimum_31 (__main__.TestTrafficGenerator.test_bva_just_above_minimum_31) ... ok
+test_bva_just_below_maximum_299 (__main__.TestTrafficGenerator.test_bva_just_below_maximum_299) ... ok
+test_bva_maximum_300 (__main__.TestTrafficGenerator.test_bva_maximum_300) ... ok
+test_bva_minimum_30 (__main__.TestTrafficGenerator.test_bva_minimum_30) ... ok
+test_bva_one_request (__main__.TestTrafficGenerator.test_bva_one_request) ... ok
+test_bva_zero_requests (__main__.TestTrafficGenerator.test_bva_zero_requests) ... ok
+test_each_request_has_arrival_time (__main__.TestTrafficGenerator.test_each_request_has_arrival_time) ... ok
+test_each_request_has_duration (__main__.TestTrafficGenerator.test_each_request_has_duration) ... ok
+test_each_request_has_id (__main__.TestTrafficGenerator.test_each_request_has_id) ... ok
+test_ec_valid_large (__main__.TestTrafficGenerator.test_ec_valid_large) ... ok
+test_ec_valid_medium (__main__.TestTrafficGenerator.test_ec_valid_medium) ... ok
+test_ec_valid_small (__main__.TestTrafficGenerator.test_ec_valid_small) ... ok
+test_generates_correct_count (__main__.TestTrafficGenerator.test_generates_correct_count) ... ok
+test_ids_are_sequential (__main__.TestTrafficGenerator.test_ids_are_sequential) ... ok
+
+----------------------------------------------------------------------
+Ran 50 tests in 0.049s
+
+OK
+
+======================================================================
+SUMMARY
+----------------------------------------------------------------------
+  Total   : 50
+  Passed  : 50
+  Failed  : 0
+  Errors  : 0
+  Skipped : 0
+======================================================================
