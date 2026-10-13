@@ -1,4 +1,4 @@
-# AI-Based Smart Load Balancer
+# Equilibra – AI-Based Smart Load Balancer
 
 A simulation system that distributes synthetic client requests across three backend 
 servers using three different strategies — Round Robin, Least Connections, and an 
